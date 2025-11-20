@@ -5,9 +5,13 @@ import (
 	"testing"
 
 	"os"
-
+	"github.com/mohammaddv/telegram-game/internal/repository/redis"
+	"github.com/ory/dockertest/v3"
 	"github.com/mohammaddv/telegram-game/pkg/testhelper"
+
 )
+
+var redisPort string
 
 func TestMain(m *testing.M) {
 
@@ -16,8 +20,14 @@ func TestMain(m *testing.M) {
 	}
 
 	pool := testhelper.StartDockerPool()
-	resource := testhelper.StartDockerInstance(pool, "redis", "latest")
-	fmt.Println(resource.GetPort("6379/tcp"))
+	resource := testhelper.StartDockerInstance(pool, "redis", "latest",
+		func(res *dockertest.Resource) error {
+			port := res.GetPort("6379/tcp")
+			_, err := redis.NewRedisClient(fmt.Sprintf("localhost:%s", port))
+			return err
+		},
+	)
+	redisPort = resource.GetPort("6379/tcp")
 	fmt.Println("redis is running")
 	defer resource.Close()
 

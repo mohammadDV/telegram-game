@@ -27,11 +27,14 @@ func StartDockerPool() *dockertest.Pool {
 	return pool
 }
 
-func StartDockerInstance(pool *dockertest.Pool, image , tag string, env ...string) *dockertest.Resource {
+
+type RetryFunc func(res *dockertest.Resource) error
+
+func StartDockerInstance(pool *dockertest.Pool, image , tag string, retryFunc RetryFunc, env ...string) *dockertest.Resource {
 
 	// pulls an image, creates a container based on it and runs it
 	resource, err := pool.RunWithOptions(&dockertest.RunOptions{
-		Repository: image,
+		Repository: image, 
 		Tag: tag,
 		Env: env,
 	}, func(config *docker.HostConfig) {
@@ -45,6 +48,13 @@ func StartDockerInstance(pool *dockertest.Pool, image , tag string, env ...strin
 
 	if err := resource.Expire(120); err != nil {
 		logrus.WithError(err).Fatalln("Could not expire resource")
+	}
+
+	// exponential backoff-retry, because the application in the container might not be ready to accept connections yet
+	if err := pool.Retry(func() error {
+		return retryFunc(resource)
+	}); err != nil {
+		logrus.WithError(err).Fatalln("Could not connect to database")
 	}
 
 	return resource

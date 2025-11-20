@@ -1,7 +1,6 @@
 package entity
 
 import (
-	"fmt"
 	"time"
 )
 
@@ -14,5 +13,5 @@ type Account struct {
 }
 
 func (a *Account) EntityID() ID {
-	return ID(fmt.Sprintf("%s:%s", a.ID, a.Username))
+	return NewID("account", a.ID)
 } 
