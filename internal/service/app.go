@@ -1,8 +1,5 @@
 package service
 
-import (
-	"github.com/mohammaddv/telegram-game/internal/repository"
-)
 
 type App struct {
 	account *AccountService
