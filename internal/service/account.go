@@ -12,6 +12,10 @@ type AccountService struct {
 	accountRepository repository.AccountRepository
 }
 
+func NewAccountService(accountRepository repository.AccountRepository) *AccountService {
+	return &AccountService{accountRepository: accountRepository}
+}
+
 func (a *AccountService) UpdateOrCreate(ctx context.Context, account entity.Account) error {
 	err := a.accountRepository.Save(ctx, account)
 	if err != nil {
