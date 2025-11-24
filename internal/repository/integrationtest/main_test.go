@@ -5,10 +5,10 @@ import (
 	"testing"
 
 	"os"
-	"github.com/mohammaddv/telegram-game/internal/repository/redis"
-	"github.com/ory/dockertest/v3"
-	"github.com/mohammaddv/telegram-game/pkg/testhelper"
 
+	"github.com/mohammaddv/telegram-game/internal/repository/redis"
+	"github.com/mohammaddv/telegram-game/pkg/testhelper"
+	"github.com/ory/dockertest/v3"
 )
 
 var redisPort string

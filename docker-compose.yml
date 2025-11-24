@@ -1,0 +1,25 @@
+services:
+  redis:
+    image: redis:latest
+    container_name: romantic_gauss
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    command: redis-server --appendonly yes
+    restart: unless-stopped
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: telegram-game-app
+    depends_on:
+      - redis
+    environment:
+      - REDIS_URL=redis:6379
+      - BOT_API=${BOT_API}
+    restart: unless-stopped
+
+volumes:
+  redis-data:
