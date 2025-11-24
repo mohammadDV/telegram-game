@@ -35,9 +35,12 @@ func TestCommonBehaviourSetAndGet(t *testing.T) {
 	assert.Equal(t, val.ID, "14")
 	fmt.Println(val)
 
-
 	val, err = cb.Get(context.Background(), entity.NewID("testType", "16"))
 	assert.ErrorIs(t, err, repository.ErrorNotFound)
 
+	// Print key info for debugging
+	fmt.Printf("\nTest created key: %s\n", entity.NewID("testType", "14").String())
+	fmt.Printf("To view in Redis: redis-cli -h localhost -p %s GET %s\n", redisPort, entity.NewID("testType", "14").String())
+	fmt.Printf("To view all keys: redis-cli -h localhost -p %s KEYS '*'\n", redisPort)
 
 }

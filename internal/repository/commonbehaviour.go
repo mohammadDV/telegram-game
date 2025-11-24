@@ -12,7 +12,6 @@ import (
 
 var _ CommonBehaviour[entity.Entity] = &RedisCommonBehaviour[entity.Entity]{}
 
-
 type RedisCommonBehaviour[T entity.Entity] struct {
 	client rueidis.Client
 }

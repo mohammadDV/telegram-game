@@ -5,7 +5,8 @@ import (
 
 	"github.com/mohammaddv/telegram-game/internal/entity"
 	"github.com/mohammaddv/telegram-game/internal/repository"
-	"github.com/sirupsen/logrus"
+	"errors"
+	"time"
 )
 
 type AccountService struct {
@@ -16,11 +17,30 @@ func NewAccountService(accountRepository repository.AccountRepository) *AccountS
 	return &AccountService{accountRepository: accountRepository}
 }
 
-func (a *AccountService) UpdateOrCreate(ctx context.Context, account entity.Account) error {
-	err := a.accountRepository.Save(ctx, account)
-	if err != nil {
-		logrus.WithError(err).WithField("account", account).Errorln("failed to update or create account")
-		return err
+var (
+	AccountStateNew = "home"
+	AccountStateActive = "active"
+	AccountStateInactive = "inactive"
+)
+
+func (a *AccountService) UpdateOrCreate(ctx context.Context, account entity.Account) (entity.Account, bool, error) {
+
+
+	savedAccount, err := a.accountRepository.Get(ctx, account.EntityID())
+	if err == nil {
+		if account.Username != savedAccount.Username || account.FirstName != savedAccount.FirstName {
+			savedAccount.Username = account.Username
+			savedAccount.FirstName = account.FirstName
+			return savedAccount, false, a.accountRepository.Save(ctx, savedAccount)
+		}
+		return savedAccount, false, nil
 	}
-	return nil
+
+	if errors.Is(err, repository.ErrorNotFound) {
+		account.State = AccountStateNew
+		account.JoinedAt = time.Now()
+		return account, true, a.accountRepository.Save(ctx, account)
+	}
+
+	return entity.Account{}, false, err
 }

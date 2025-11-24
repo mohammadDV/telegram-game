@@ -12,7 +12,7 @@ type Telegram struct {
 	bot *telebot.Bot
 }
 
-func NewTelegram(app *service.App,apiKey string) (*Telegram, error) {
+func NewTelegram(app *service.App, apiKey string) (*Telegram, error) {
 	pref := telebot.Settings{
 		Token:  apiKey,
 		Poller: &telebot.LongPoller{Timeout: 60 * time.Second},

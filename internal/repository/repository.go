@@ -1,17 +1,18 @@
 package repository
 
 import (
-	"errors"
-	"github.com/mohammaddv/telegram-game/internal/entity"
 	"context"
+	"errors"
+
+	"github.com/mohammaddv/telegram-game/internal/entity"
 )
 
-
- var (
+var (
 	ErrorNotFound = errors.New("not found")
- )
+)
 
- type AccountRepository interface {
+//go:generate mockery --name=AccountRepository
+type AccountRepository interface {
 	CommonBehaviour[entity.Account]
 }
 
