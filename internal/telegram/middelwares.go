@@ -26,7 +26,7 @@ func (t *Telegram) registerMiddelware(next telebot.HandlerFunc) telebot.HandlerF
 		}
 
 		c.Set("account", account)
-		c.Set("accountSaved", accountSaved)
+		c.Set("is_just_created", accountSaved)
 
 		return next(c)
 	}

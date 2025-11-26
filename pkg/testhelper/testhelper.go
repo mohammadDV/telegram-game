@@ -27,20 +27,19 @@ func StartDockerPool() *dockertest.Pool {
 	return pool
 }
 
-
 type RetryFunc func(res *dockertest.Resource) error
 
-func StartDockerInstance(pool *dockertest.Pool, image , tag string, retryFunc RetryFunc, env ...string) *dockertest.Resource {
+func StartDockerInstance(pool *dockertest.Pool, image, tag string, retryFunc RetryFunc, env ...string) *dockertest.Resource {
 
 	// pulls an image, creates a container based on it and runs it
 	resource, err := pool.RunWithOptions(&dockertest.RunOptions{
-		Repository: image, 
-		Tag: tag,
-		Env: env,
+		Repository: image,
+		Tag:        tag,
+		Env:        env,
 	}, func(config *docker.HostConfig) {
 		config.AutoRemove = true
 		config.RestartPolicy = docker.RestartPolicy{Name: "no"}
-	}) 
+	})
 
 	if err != nil {
 		logrus.WithError(err).Fatalln("Could not start resource")

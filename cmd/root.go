@@ -1,6 +1,5 @@
 /*
 Copyright © 2025 NAME HERE <EMAIL ADDRESS>
-
 */
 package cmd
 
@@ -10,13 +9,11 @@ import (
 	"github.com/spf13/cobra"
 )
 
-
-
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
 	Use:   "telegram-game",
 	Short: "Telegram game",
-	Long: `Telegram game`,
+	Long:  `Telegram game`,
 	Run: func(cmd *cobra.Command, args []string) {
 		serve(cmd, args)
 	},
@@ -34,5 +31,3 @@ func Execute() {
 func init() {
 	rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
-
-

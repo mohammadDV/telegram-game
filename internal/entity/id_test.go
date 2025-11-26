@@ -1,5 +1,4 @@
 package entity
- 
 
 import (
 	"testing"

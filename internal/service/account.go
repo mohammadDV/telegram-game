@@ -3,9 +3,9 @@ package service
 import (
 	"context"
 
+	"errors"
 	"github.com/mohammaddv/telegram-game/internal/entity"
 	"github.com/mohammaddv/telegram-game/internal/repository"
-	"errors"
 	"time"
 )
 
@@ -18,13 +18,12 @@ func NewAccountService(accountRepository repository.AccountRepository) *AccountS
 }
 
 var (
-	AccountStateNew = "home"
-	AccountStateActive = "active"
+	AccountStateNew      = "home"
+	AccountStateActive   = "active"
 	AccountStateInactive = "inactive"
 )
 
 func (a *AccountService) UpdateOrCreate(ctx context.Context, account entity.Account) (entity.Account, bool, error) {
-
 
 	savedAccount, err := a.accountRepository.Get(ctx, account.EntityID())
 	if err == nil {

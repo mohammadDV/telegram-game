@@ -2,14 +2,16 @@ package telegram
 
 import (
 	"github.com/mohammaddv/telegram-game/internal/service"
-	"gopkg.in/telebot.v3"
+	"github.com/mohammaddv/telegram-game/internal/telegram/teleprompt"
 	"github.com/sirupsen/logrus"
+	"gopkg.in/telebot.v3"
 	"time"
 )
 
 type Telegram struct {
-	App *service.App
-	bot *telebot.Bot
+	App        *service.App
+	bot        *telebot.Bot
+	TelePrompt *TelePrompt.TelePrompt
 }
 
 func NewTelegram(app *service.App, apiKey string) (*Telegram, error) {
@@ -25,14 +27,14 @@ func NewTelegram(app *service.App, apiKey string) (*Telegram, error) {
 	}
 
 	t := &Telegram{
-		bot: bot,
-		App: app,
+		bot:        bot,
+		App:        app,
+		TelePrompt: TelePrompt.NewTelePrompt(),
 	}
 
 	t.setupHandlers()
 
 	return t, nil
-
 
 }
 

@@ -14,3 +14,9 @@ test-entity:
 
 test-integration:
 	TEST_INTEGRATION=true go test ./... -v
+
+run:
+	docker compose down
+	docker compose up -d --build
+
+dev: run

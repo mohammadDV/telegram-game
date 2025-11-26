@@ -3,13 +3,13 @@ package service
 import (
 	"testing"
 
+	"context"
 	"github.com/mohammaddv/telegram-game/internal/entity"
 	"github.com/mohammaddv/telegram-game/internal/repository/mocks"
-	"context"
 
+	"github.com/mohammaddv/telegram-game/internal/repository"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/mock"
-	"github.com/mohammaddv/telegram-game/internal/repository"
 )
 
 func TestAccountService_UpdateOrCreate(t *testing.T) {
@@ -17,7 +17,7 @@ func TestAccountService_UpdateOrCreate(t *testing.T) {
 	s := NewAccountService(accRep)
 
 	accRep.On("Get", mock.Anything, entity.NewID("account", 12)).Return(entity.Account{
-		ID: 12,
+		ID:        12,
 		FirstName: "Reza",
 	}, nil).Once()
 
@@ -26,7 +26,7 @@ func TestAccountService_UpdateOrCreate(t *testing.T) {
 	})).Return(nil).Once()
 
 	newAcc, savedAcc, err := s.UpdateOrCreate(context.Background(), entity.Account{
-		ID: 12,
+		ID:        12,
 		FirstName: "Ali",
 	})
 
@@ -50,7 +50,7 @@ func TestAccountService_UpdateOrCreateWithUserNoExists(t *testing.T) {
 	})).Return(nil).Once()
 
 	newAcc, savedAcc, err := s.UpdateOrCreate(context.Background(), entity.Account{
-		ID: 12,
+		ID:        12,
 		FirstName: "Ali",
 	})
 
@@ -61,18 +61,17 @@ func TestAccountService_UpdateOrCreateWithUserNoExists(t *testing.T) {
 	accRep.AssertExpectations(t)
 }
 
-
 func TestAccountService_UpdateOrCreateWithUserHasNotChanged(t *testing.T) {
 	accRep := mocks.NewAccountRepository(t)
 	s := NewAccountService(accRep)
 
 	accRep.On("Get", mock.Anything, entity.NewID("account", 12)).Return(entity.Account{
-		ID: 12,
+		ID:        12,
 		FirstName: "Ali",
 	}, nil).Once()
 
 	newAcc, savedAcc, err := s.UpdateOrCreate(context.Background(), entity.Account{
-		ID: 12,
+		ID:        12,
 		FirstName: "Ali",
 	})
 

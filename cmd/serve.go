@@ -4,24 +4,24 @@ import (
 	"fmt"
 
 	"github.com/joho/godotenv"
-	"github.com/spf13/cobra"
-	"github.com/mohammaddv/telegram-game/internal/repository/redis"
-	"github.com/sirupsen/logrus"
-	"os"
 	"github.com/mohammaddv/telegram-game/internal/repository"
+	"github.com/mohammaddv/telegram-game/internal/repository/redis"
 	"github.com/mohammaddv/telegram-game/internal/service"
 	"github.com/mohammaddv/telegram-game/internal/telegram"
+	"github.com/sirupsen/logrus"
+	"github.com/spf13/cobra"
+	"os"
 )
 
 // serveCmd represents the serve command
 var serveCmd = &cobra.Command{
 	Use:   "serve",
 	Short: "Serve the game",
-	Run: serve,
+	Run:   serve,
 }
 
 func serve(_ *cobra.Command, _ []string) {
-	_ = godotenv.Load();
+	_ = godotenv.Load()
 
 	// setup repository
 	redisClient, err := redis.NewRedisClient(os.Getenv("REDIS_URL"))
