@@ -4,7 +4,9 @@ import (
 	"context"
 
 	"time"
-
+	"errors"
+	"fmt"
+	"github.com/google/uuid"
 	"github.com/mohammaddv/telegram-game/internal/entity"
 	"github.com/sirupsen/logrus"
 	"gopkg.in/telebot.v3"
@@ -31,3 +33,17 @@ func (t *Telegram) registerMiddelware(next telebot.HandlerFunc) telebot.HandlerF
 		return next(c)
 	}
 }
+
+
+func (t *Telegram) OnError(err error, c telebot.Context) {
+	if errors.Is(err, ErrorInputTimeout) {
+		return
+	}
+
+	errorId := uuid.New().String()
+
+	logrus.WithError(err).WithField("error_id", errorId).Errorln("telegram error")
+
+	c.Reply(fmt.Sprintf("An error occurred. Please try again later. Error ID: %s", errorId))
+}
+

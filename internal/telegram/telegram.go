@@ -15,22 +15,28 @@ type Telegram struct {
 }
 
 func NewTelegram(app *service.App, apiKey string) (*Telegram, error) {
+	
+	t := &Telegram{
+		App:        app,
+		TelePrompt: TelePrompt.NewTelePrompt(),
+	}
+
 	pref := telebot.Settings{
 		Token:  apiKey,
 		Poller: &telebot.LongPoller{Timeout: 60 * time.Second},
+		OnError: t.OnError,
 	}
 
 	bot, err := telebot.NewBot(pref)
+
+	t.bot = bot
+
 	if err != nil {
 		logrus.WithError(err).Errorln("failed to create bot")
 		return nil, err
 	}
 
-	t := &Telegram{
-		bot:        bot,
-		App:        app,
-		TelePrompt: TelePrompt.NewTelePrompt(),
-	}
+	
 
 	t.setupHandlers()
 

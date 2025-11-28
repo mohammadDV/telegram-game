@@ -3,7 +3,6 @@ package telegram
 import (
 	"errors"
 	"gopkg.in/telebot.v3"
-	"time"
 )
 
 var (
@@ -22,10 +21,12 @@ func (t *Telegram) Input(c telebot.Context, config InputContext) (*telebot.Messa
 		c.Reply(config.Prompt)
 	}
 
-	response, isTimeout := t.TelePrompt.AsMessage(c.Sender().ID, time.Second*5)
+	response, isTimeout := t.TelePrompt.AsMessage(c.Sender().ID, DefaultInputTimeout)
 	if isTimeout {
 		if config.OnTimeout != nil {
 			c.Reply(config.OnTimeout)
+		} else {
+			c.Reply(DefaultTimeoutText)
 		}
 		return nil, ErrorInputTimeout
 	}
