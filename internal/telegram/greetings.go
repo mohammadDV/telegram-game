@@ -1,36 +1,32 @@
 package telegram
 
 import (
-	"context"
 	"fmt"
 	"gopkg.in/telebot.v3"
 )
 
 func (t *Telegram) start(c telebot.Context) error {
 	isJustCreated := c.Get("is_just_created").(bool)
+
+	if !isJustCreated {
+		return t.myInfo(c)
+	}
+
+	if err := t.editDisplayNameProfile(c, "Welcome to the game! please enter your name"); err != nil {
+		return err
+	}
+
+	return t.myInfo(c)
+}
+
+
+func (t *Telegram) myInfo(c telebot.Context) error {
 	account := getAccount(c)
 
-	if isJustCreated {
-		//todo: ...
-	}
+	var selector = &telebot.ReplyMarkup{}
+	selector.Inline(selector.Row(brnEditDisplayName))
+	return c.Send(fmt.Sprintf("Welcome, how can I help you? %s!", account.DisplayName),
+		selector,
+)
 
-	msg, err := t.Input(c, InputContext{
-		Prompt:    "Welcome to the game! please enter your name",
-		OnTimeout: "Timeout too",
-	})
-	if err != nil {
-		return err
-	}
-
-	displayname := msg.Text
-	account.DisplayName = displayname 
-
-	if err :=  t.App.Account().Update(context.Background(), account); err != nil {
-		return err
-	}
-
-	// todo: validation
-	c.Reply(fmt.Sprintf("Hello, %s!", displayname))
-
-	return nil
 }
