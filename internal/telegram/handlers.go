@@ -11,6 +11,7 @@ func (t *Telegram) setupHandlers() {
 	// handlers
 	t.bot.Handle("/start", t.start)
 	t.bot.Handle(telebot.OnText, t.textHandler)
+	t.bot.Handle(&brnEditDisplayName, t.editDisplayName)
 }
 
 func (t *Telegram) textHandler(c telebot.Context) error {

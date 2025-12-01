@@ -3,14 +3,13 @@ package telegram
 import (
 	"context"
 	"fmt"
-	"github.com/mohammaddv/telegram-game/internal/entity"
+
 	"gopkg.in/telebot.v3"
 )
 
-func (t *Telegram) editProfile(c telebot.Context) error {
+func (t *Telegram) editDisplayName(c telebot.Context) error {
 	c.Delete()
-	t.editDisplayNameProfile(c, "What name do you want to use?")
-	return t.myInfo(c)
+	return t.editDisplayNameProfile(c, "What name do you want to use?")
 }
 
 func (t *Telegram) editDisplayNameProfile(c telebot.Context, promptText string) error {
@@ -42,10 +41,9 @@ func (t *Telegram) editDisplayNameProfile(c telebot.Context, promptText string) 
 	}
 
 	displayname := msg.Text
-	account.DisplayName = displayname 
+	account.DisplayName = displayname
 
-	
-	if err :=  t.App.Account().Update(context.Background(), account); err != nil {
+	if err := t.App.Account().Update(context.Background(), account); err != nil {
 		return err
 	}
 	c.Set("account", account)

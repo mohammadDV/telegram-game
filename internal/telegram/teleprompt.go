@@ -51,10 +51,8 @@ getInput:
 	}
 
 	if config.Validator.validator != nil && !config.Validator.validator(response) {
-		if !config.Validator.validator(response) {
-			c.Send(config.Validator.OnInvalid(response))
-			goto getInput
-		}
+		c.Send(config.Validator.OnInvalid(response))
+		goto getInput
 	}
 
 	// client has to confirm
