@@ -8,7 +8,7 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-func Integration() bool {
+func IsIntegration() bool {
 	return os.Getenv("TEST_INTEGRATION") == "true"
 }
 
